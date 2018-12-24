@@ -27,7 +27,7 @@ func (pa *PinActivity) TableName() string {
 }
 //入库
 func (pa *PinActivity) PinActivityAdd() error{
-	if err := checkPinActivity(pa); err != nil {
+	if err := CheckPinActivity(pa); err != nil {
 		return  err
 	}
 	if _, err := orm.NewOrm().Insert(pa); err != nil {
@@ -38,7 +38,7 @@ func (pa *PinActivity) PinActivityAdd() error{
 /**
 检测数据
 */
-func checkPinActivity(pa *PinActivity) (err error) {
+func CheckPinActivity(pa *PinActivity) (err error) {
 	valid := validation.Validation{}
 	b,_ := valid.Valid(pa)
 	if !b {
@@ -57,5 +57,18 @@ func (pa *PinActivity) GetActivityInfo(activityId int)(*PinActivity,error) {
 		return nil,err
 	}
 	return pa ,nil
+}
+/**
+根据id修改内容
+*/
+func (pa *PinActivity) UpdateActivityInfo(fields ...string) error {
+	if err := CheckPinActivity(pa); err != nil {
+		return  err
+	}
+	_,err := orm.NewOrm().Update(pa,fields...)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 

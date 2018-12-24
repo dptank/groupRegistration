@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"time"
 	"fmt"
+	"github.com/astaxie/beego/validation"
 )
 
 type ActivityController struct {
@@ -16,9 +17,10 @@ func (this *ActivityController) Info() {
 	var ob models.PinActivity
 	id ,_:= this.GetInt("id")
 	info,err := ob.GetActivityInfo(id)
+	//fmt.Println(info)
 	if err != nil {
-		status := false
-		this.Rsp(status,err.Error())
+		status := true
+		this.Rsps(status,200,"暂无数据","")
 	}
 	row := make(map[string]interface{})
 	row["id"] = info.Id
@@ -40,7 +42,7 @@ func (this *ActivityController) Add() {
 	err := json.Unmarshal(this.Ctx.Input.RequestBody, &ob)
 	if err != nil {
 		status := false
-		this.Rsp(status,err.Error())
+		this.Rsps(status,500,err.Error(),"")
 	}
 	nowData := time.Now().Local()
 	ob.CreatedAt = nowData
@@ -54,12 +56,38 @@ func (this *ActivityController) Add() {
 	status := true
 	this.Rsps(status,200,"增加成功","")
 }
-
+/**
+修改活动信息
+*/
 func (this *ActivityController) Update() {
-	m := make(map[string]int)
-	m["k1"] = 1
-	m["k2"] = 13
+	var ob models.PinActivity
+	err := json.Unmarshal(this.Ctx.Input.RequestBody, &ob)
+	if err != nil {
+		status := false
+		this.Rsps(status,500,err.Error(),"")
+	}
+	//检测
+	valid := validation.Validation{}
+	if v := valid.Required(ob.Id,"id").Message("不能为空！");!v.Ok {
+		status := false
+		errInfo := v.Error.Key + " " + v.Error.Message
+		this.Rsps(status,500,errInfo,"")
+	}
+	//fmt.Println(ob.Title)
+	//info,_ := ob.GetActivityInfo(ob.Id)
+	//if info == nil {
+	//	status := false
+	//	this.Rsps(status,500,"不存在该id","")
+	//}
+	fmt.Println(info.Title)
 
-	this.Data["json"] = &m
-	this.ServeJSON()
+	//修改
+	res := ob.UpdateActivityInfo()
+	fmt.Println(res)
+	if res != nil {
+		status := false
+		this.Rsps(status,500,res.Error(),"")
+	}
+	status := true
+	this.Rsps(status,200,"修改成功","")
 }
