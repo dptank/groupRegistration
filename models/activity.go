@@ -18,8 +18,8 @@ type PinActivity struct {
 	EndTime int64 `orm:"column(end_time)" valid:"Required"`
 	Status int `orm:"column(status)"`
 	Img string `orm:"column(img)" valid:"Required"`
-	CreatedAt time.Time `orm:"column(created_at);auto_now_add;type(datetime)" `
-	UpdatedAt time.Time `orm:"column(updated_at);auto_now;type(datetime)"`
+	CreatedAt time.Time `orm:"auto_now_add;column(created_at);type(datetime)"`
+	UpdatedAt time.Time `orm:"auto_now;column(updated_at);type(datetime)"`
 }
 
 func (pa *PinActivity) TableName() string {

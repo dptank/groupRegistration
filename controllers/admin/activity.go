@@ -79,8 +79,6 @@ func (this *ActivityController) Update() {
 	//	status := false
 	//	this.Rsps(status,500,"不存在该id","")
 	//}
-	fmt.Println(info.Title)
-
 	//修改
 	res := ob.UpdateActivityInfo()
 	fmt.Println(res)
@@ -90,4 +88,35 @@ func (this *ActivityController) Update() {
 	}
 	status := true
 	this.Rsps(status,200,"修改成功","")
+}
+/**
+状态修改
+*/
+func (this *ActivityController) ChangStatus() {
+	var ob models.PinActivity
+	id ,_:= this.GetInt("id")
+	status ,_:= this.GetInt("status")
+	info,err := ob.GetActivityInfo(id)
+	if err != nil {
+		res := false
+		this.Rsps(res,500,"暂无数据","")
+	}
+
+	info.Status = status
+	res :=  info.UpdateActivityInfo()
+	if res != nil {
+		status := false
+		this.Rsps(status,500,res.Error(),"")
+	}
+	result := true
+	this.Rsps(result,200,"修改成功","")
+}
+/**
+活动list
+*/
+func (this *ActivityController) Index(){
+	pageNum ,_:= this.GetInt("pageNum")
+	pageSize ,_:= this.GetInt("pageSize")
+
+	this.Rsps(true,200,"修改成功","")
 }
