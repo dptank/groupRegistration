@@ -1,6 +1,9 @@
 package admin
 
-import "github.com/astaxie/beego"
+import (
+	"github.com/astaxie/beego"
+	"fmt"
+)
 
 type baseController struct {
 	beego.Controller
@@ -14,6 +17,7 @@ func (self *baseController) Rsps(res bool, code int, msg string, data interface{
 	out["err"] = errmsg
 	out["success"] = res
 	out["data"] = data
+	fmt.Println(out)
 	self.Data["json"] = out
 	self.ServeJSON()
 	self.StopRun()

@@ -71,4 +71,21 @@ func (pa *PinActivity) UpdateActivityInfo(fields ...string) error {
 	}
 	return nil
 }
+/**
+获取列表
+*/
+func (pa *PinActivity) GetActivityList(page,offset, pageSize int, filters ...interface{})([]*PinActivity,int64) {
+	list := make([]*PinActivity,0)
+	query := orm.NewOrm().QueryTable(TableName("pin_activity"))
+	if len(filters) > 0 {
+		l := len(filters)
+		for k := 0; k < l; k += 2 {
+			query = query.Filter(filters[k].(string), filters[k+1])
+		}
+	}
+	total, _ := query.Count()
+	query.OrderBy("-id").Limit(pageSize, offset).All(&list)
+	//fmt.Println(list)
+	return list, total
+}
 

@@ -5,6 +5,8 @@ import (
 	"time"
 	"fmt"
 	"github.com/astaxie/beego/validation"
+	"groupRegistration/lib"
+	"github.com/astaxie/beego"
 )
 
 type ActivityController struct {
@@ -115,8 +117,29 @@ func (this *ActivityController) ChangStatus() {
 活动list
 */
 func (this *ActivityController) Index(){
-	pageNum ,_:= this.GetInt("pageNum")
-	pageSize ,_:= this.GetInt("pageSize")
+	var ob models.PinActivity
+	pageNum ,_:= this.GetInt("pageNum",1)
+	pageSize ,_:= this.GetInt("pageSize",10)
+	offset := lib.PageInit(pageNum,pageSize)
+	result ,total :=ob.GetActivityList(pageNum,offset,pageSize)
+	list := make([]map[string]interface{}, len(result))
+	for k, v := range result {
+		row := make(map[string]interface{})
+		row["id"] = v.Id
+		row["title"] = v.Title
+		row["joinCount"] = v.JoinCount
+		row["ownerPrice"] = v.OwnerPrice
+		row["memberPrice"] = v.MemberPrice
+		row["ownerPrice"] = v.OwnerPrice
+		row["priceType"] = v.PriceType
+		row["startTime"] = beego.Date(time.Unix(v.StartTime, 0), "Y-m-d H:i:s")
+		row["endTime"] = beego.Date(time.Unix(v.EndTime, 0), "Y-m-d H:i:s")
+		row["status"] = v.Status
+		row["img"] = v.Img
+		list[k] = row
+	}
 
-	this.Rsps(true,200,"修改成功","")
+	data := lib.PageUtil(int(total),pageNum,pageSize,list)
+
+	this.Rsps(true,200,"修改成功",data)
 }

@@ -7,10 +7,28 @@ type Page struct {
 	nextPage  bool
 	list       interface{}
 }
-func PageUtil(count int, pageNum int, pageSize int, list interface{},nextPage bool) Page {
+func PageUtil(count int, pageNum int, pageSize int, list interface{}) interface{} {
+	nextPage := true
 	tp := count / pageSize
 	if count % pageSize > 0 {
 		tp = count / pageSize + 1
+		if tp <= pageNum {
+			nextPage = false
+		}
 	}
-	return Page{pageNum: pageNum, pageSize: pageSize, totalPage: tp, totalCount: count, nextPage:nextPage , list: list}
+	data := make(map[string]interface{})
+	data["pageNum"] = pageNum
+	data["pageSize"] = pageSize
+	data["totalPage"] = tp
+	data["totalCount"] = count
+	data["nextPage"] = nextPage
+	data["list"] = list
+	return data
+}
+/**
+获取偏移量
+*/
+func PageInit(num int,pageSize int)(offset int) {
+	pageOffset := (num - 1) * pageSize
+	return pageOffset
 }
