@@ -26,7 +26,9 @@ func Init() {
 	if timezone == "" {
 		dsn = dsn + "&loc=" + url.QueryEscape(timezone)
 	}
-	orm.RegisterDataBase("default","mysql",dsn)
+	maxIdle := 30
+	maxConn := 300
+	orm.RegisterDataBase("default","mysql",dsn,maxIdle,maxConn)
 	orm.RegisterModel(new(PinActivity))
 	if beego.AppConfig.String("runmode") == "dev" {
 		orm.Debug = true
