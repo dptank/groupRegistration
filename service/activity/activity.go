@@ -126,9 +126,9 @@ func ChangeInfoStatus(id int,st int) ( bool,int,string,interface{}){
 /**
 获取信息列表
 */
-func GetInfoList(pageNum int,pageSize int,offset int) ( bool,int,string,interface{}){
+func GetInfoList(pageNum int,pageSize int,offset int,filters ...interface{}) ( bool,int,string,interface{}){
 	var ob models.PinActivity
-	result ,total :=ob.GetActivityList(pageNum,offset,pageSize)
+	result ,total :=ob.GetActivityList(pageNum,offset,pageSize,filters...)
 	list := make([]map[string]interface{}, len(result))
 
 	for k, v := range result {

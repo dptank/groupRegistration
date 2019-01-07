@@ -48,6 +48,8 @@ func (this *ActivityController) List(){
 	pageNum ,_:= this.GetInt("pageNum",1)
 	pageSize ,_:= this.GetInt("pageSize",10)
 	offset := lib.PageInit(pageNum,pageSize)
-	status,code,msg,res := activity.GetInfoList(pageNum,pageSize,offset)
+	filters := make([]interface{}, 0)
+	filters = append(filters,"status__in",[]int{0,1,2})
+	status,code,msg,res := activity.GetInfoList(pageNum,pageSize,offset,filters...)
 	this.Rsps(status,code,msg,res)
 }

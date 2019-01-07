@@ -1,21 +1,22 @@
 package pinActivity
 import (
-"github.com/astaxie/beego"
+	"groupRegistration/controllers"
+	"groupRegistration/lib"
+	"groupRegistration/service/activity"
 )
 
 type ActivityController struct {
-	beego.Controller
+	controllers.BaseController
 }
-
-func (this *ActivityController) Index() {
-	m := make(map[string]int)
-	m["k1"] = 1
-	m["k2"] = 13
-	c := make(map[string]bool)
-	c["code"]=true
-
-	this.Data["json"] = &m
-	//this.Data["Email"] = "astaxie@gmail.com"
-	this.ServeJSON()
-	//c.TplName = "index.tpl"
+/**
+手机端活动列表页
+*/
+func (this *ActivityController) ActivityList() {
+	pageNum ,_:= this.GetInt("pageNum",1)
+	pageSize ,_:= this.GetInt("pageSize",10)
+	offset := lib.PageInit(pageNum,pageSize)
+	filters := make([]interface{}, 0)
+	filters = append(filters,"status",1)
+	status,code,msg,res := activity.GetInfoList(pageNum,pageSize,offset,filters...)
+	this.Rsps(status,code,msg,res)
 }

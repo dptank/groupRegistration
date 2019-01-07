@@ -8,5 +8,5 @@ import (
 前端活动路由
 */
 func pinActivityRouter() {
-	beego.Router("/activty/user", &pinActivity.ActivityController{},"*:Index")
+	beego.Router("/activty/list", &pinActivity.ActivityController{},"POST:ActivityList")
 }
