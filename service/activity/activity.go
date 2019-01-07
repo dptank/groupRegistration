@@ -6,7 +6,6 @@ import (
 	"time"
 	"github.com/astaxie/beego/validation"
 	"groupRegistration/lib"
-	"github.com/astaxie/beego"
 )
 /**
 获取活动详情
@@ -131,7 +130,9 @@ func GetInfoList(pageNum int,pageSize int,offset int) ( bool,int,string,interfac
 	var ob models.PinActivity
 	result ,total :=ob.GetActivityList(pageNum,offset,pageSize)
 	list := make([]map[string]interface{}, len(result))
+
 	for k, v := range result {
+		//fmt.Println(v.StartTime)
 		row := make(map[string]interface{})
 		row["id"] = v.Id
 		row["title"] = v.Title
@@ -140,8 +141,8 @@ func GetInfoList(pageNum int,pageSize int,offset int) ( bool,int,string,interfac
 		row["memberPrice"] = v.MemberPrice
 		row["ownerPrice"] = v.OwnerPrice
 		row["priceType"] = v.PriceType
-		row["startTime"] = beego.Date(time.Unix(v.StartTime, 0), "Y-m-d H:i:s")
-		row["endTime"] = beego.Date(time.Unix(v.EndTime, 0), "Y-m-d H:i:s")
+		row["startTime"] = time.Unix(v.StartTime, 0).Format("2006-01-02 15:04:05")//beego.Date(time.Unix(v.StartTime, 0), "Y-m-d H:i:s")
+		row["endTime"] = time.Unix(v.EndTime, 0).Format("2006-01-02 15:04:05")//beego.Date(time.Unix(v.EndTime, 0), "Y-m-d H:i:s")
 		row["status"] = v.Status
 		row["img"] = v.Img
 		list[k] = row
