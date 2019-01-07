@@ -18,6 +18,7 @@ type PinActivity struct {
 	EndTime int64 `orm:"column(end_time)" valid:"Required"`
 	Status int `orm:"column(status)"`
 	Img string `orm:"column(img)" valid:"Required"`
+	Stock int `orm:"column(stock)" valid:"Required"`
 	CreatedAt time.Time `orm:"auto_now_add;column(created_at);type(datetime)"`
 	UpdatedAt time.Time `orm:"auto_now;column(updated_at);type(datetime)"`
 }

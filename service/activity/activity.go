@@ -27,6 +27,7 @@ func GetInfo(id int) (res interface{}){
 	row["startTime"] = info.StartTime
 	row["endTime"] = info.EndTime
 	row["status"] = info.Status
+	row["stock"] = info.Stock
 	return row
 }
 /**
@@ -145,6 +146,7 @@ func GetInfoList(pageNum int,pageSize int,offset int,filters ...interface{}) ( b
 		row["endTime"] = time.Unix(v.EndTime, 0).Format("2006-01-02 15:04:05")//beego.Date(time.Unix(v.EndTime, 0), "Y-m-d H:i:s")
 		row["status"] = v.Status
 		row["img"] = v.Img
+		row["stock"] = v.Stock
 		list[k] = row
 	}
 	data := lib.PageUtil(int(total),pageNum,pageSize,list)
