@@ -1,10 +1,12 @@
-package service
+package activity
 
 import (
 	"groupRegistration/models"
 	"encoding/json"
 	"time"
 	"github.com/astaxie/beego/validation"
+	"groupRegistration/lib"
+	"github.com/astaxie/beego"
 )
 /**
 获取活动详情
@@ -98,9 +100,55 @@ func UpdateInfo(data []uint8)  (bool,int,string,interface{}) {
 修改状态
 */
 func ChangeInfoStatus(id int,st int) ( bool,int,string,interface{}){
+	var ob models.PinActivity
+	info,err := ob.GetActivityInfo(id)
+	if err != nil {
+		status := false
+		code := 500
+		msg := "信息不存在"
+		res := ""
+		return status ,code, msg,res
+	}
+	info.Status = st
+	res :=  info.UpdateActivityInfo()
+	if res != nil {
+		status := false
+		code := 500
+		msg := err.Error()
+		res := ""
+		return status ,code, msg,res
+	}
 	status := true
 	code := 200
-	msg := "增加成功"
-	res := ""
-	return status ,code, msg,res
+	msg := "修改成功"
+	result := ""
+	return status ,code, msg,result
+}
+/**
+获取信息列表
+*/
+func GetInfoList(pageNum int,pageSize int,offset int) ( bool,int,string,interface{}){
+	var ob models.PinActivity
+	result ,total :=ob.GetActivityList(pageNum,offset,pageSize)
+	list := make([]map[string]interface{}, len(result))
+	for k, v := range result {
+		row := make(map[string]interface{})
+		row["id"] = v.Id
+		row["title"] = v.Title
+		row["joinCount"] = v.JoinCount
+		row["ownerPrice"] = v.OwnerPrice
+		row["memberPrice"] = v.MemberPrice
+		row["ownerPrice"] = v.OwnerPrice
+		row["priceType"] = v.PriceType
+		row["startTime"] = beego.Date(time.Unix(v.StartTime, 0), "Y-m-d H:i:s")
+		row["endTime"] = beego.Date(time.Unix(v.EndTime, 0), "Y-m-d H:i:s")
+		row["status"] = v.Status
+		row["img"] = v.Img
+		list[k] = row
+	}
+	data := lib.PageUtil(int(total),pageNum,pageSize,list)
+	status := true
+	code := 200
+	msg := "操作成功"
+	return status ,code, msg,data
 }

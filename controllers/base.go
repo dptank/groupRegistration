@@ -1,15 +1,15 @@
-package admin
+package controllers
 
 import (
 	"github.com/astaxie/beego"
 	"fmt"
 )
 
-type baseController struct {
+type BaseController struct {
 	beego.Controller
 }
 //返回值
-func (self *baseController) Rsps(res bool, code int, msg string, data interface{}) {
+func (self *BaseController) Rsps(res bool, code int, msg string, data interface{}) {
 	out := make(map[string]interface{})
 	errmsg := make(map[string]interface{})
 	errmsg["code"] = code

@@ -9,7 +9,7 @@ import (
 */
 func pinAdminRouter() {
 	//活动路由
-	beego.Router("/admin/activty/index", &admin.ActivityController{},"POST:Index")
+	beego.Router("/admin/activty/list", &admin.ActivityController{},"POST:List")
 	beego.Router("/admin/activty/info", &admin.ActivityController{},"POST:Info")
 	beego.Router("/admin/activty/add", &admin.ActivityController{},"*:Add")
 	beego.Router("/admin/activty/update", &admin.ActivityController{},"*:Update")
