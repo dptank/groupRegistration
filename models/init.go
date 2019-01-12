@@ -30,7 +30,7 @@ func Init() {
 	maxConn := 300
 	orm.RegisterDataBase("default","mysql",dsn,maxIdle,maxConn)
 	orm.DefaultTimeLoc = time.UTC
-	orm.RegisterModel(new(PinActivity))
+	orm.RegisterModel(new(PinActivity),new(PinEvent))
 	if beego.AppConfig.String("runmode") == "dev" {
 		orm.Debug = true
 	}

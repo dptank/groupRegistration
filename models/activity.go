@@ -10,7 +10,7 @@ import (
 type PinActivity struct {
 	Id int `orm:"column(id);pk"`
 	Title string `orm:"column(title)" valid:"Required"`
-	JoinCount int `orm:"column(join_count)" valid:"Required"`
+	CountLimit int `orm:"column(count_limit)" valid:"Required"`
 	OwnerPrice int `orm:"column(owner_price)" valid:"Required"`
 	MemberPrice int `orm:"column(member_price)" valid:"Required"`
 	PriceType int `orm:"column(price_type)"`
@@ -76,6 +76,7 @@ func (pa *PinActivity) UpdateActivityInfo(fields ...string) error {
 获取列表
 */
 func (pa *PinActivity) GetActivityList(page,offset, pageSize int, filters ...interface{})([]*PinActivity,int64) {
+	//fmt.Println(reflect.TypeOf(pa))
 	list := make([]*PinActivity,0)
 	query := orm.NewOrm().QueryTable(TableName("pin_activity"))
 	if len(filters) > 0 {

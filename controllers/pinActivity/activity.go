@@ -2,7 +2,7 @@ package pinActivity
 import (
 	"groupRegistration/controllers"
 	"groupRegistration/lib"
-	"groupRegistration/service/activity"
+	"groupRegistration/service/pinActivityService"
 )
 
 type ActivityController struct {
@@ -17,6 +17,7 @@ func (this *ActivityController) ActivityList() {
 	offset := lib.PageInit(pageNum,pageSize)
 	filters := make([]interface{}, 0)
 	filters = append(filters,"status",1)
-	status,code,msg,res := activity.GetInfoList(pageNum,pageSize,offset,filters...)
+	status,code,msg,res := pinActivityService.GetInfoList(pageNum,pageSize,offset,filters...)
 	this.Rsps(status,code,msg,res)
 }
+
