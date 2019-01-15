@@ -39,6 +39,7 @@ func GetInfo(id int) (res ActivityInfo){
 	result.StartTime = info.StartTime
 	result.EndTime = info.EndTime
 	result.Stock = info.Stock
+	result.Status = info.Status
 	//fmt.Println(result)
 	return result
 }
@@ -186,13 +187,13 @@ func CheckActivityInfo(res ActivityInfo) ( bool,string) {
 		msg := "活动还没上线"
 		return status ,msg
 	}
-	currentTime:=time.Now().Unix()
-	if res.StartTime<currentTime {
+	currentTime := time.Now().Unix()
+	if res.StartTime>currentTime {
 		status := false
 		msg := "活动还没上线"
 		return status ,msg
 	}
-	if res.EndTime>currentTime {
+	if res.EndTime<currentTime {
 		status := false
 		msg := "活动时间以过"
 		return status ,msg
